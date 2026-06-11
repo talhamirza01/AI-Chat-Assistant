@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: ai-chat-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-chat-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: APP_ENV
+        value: production
+      - key: CORS_ORIGINS
+        sync: false
+
+databases:
+  - name: ai-chat-db
+    plan: free
